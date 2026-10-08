@@ -53,8 +53,10 @@ TIMEBASE_BEATS = {
     18: 1 / 3,
     19: 1 / 6,
     20: 1 / 12,
+    9: 6,
+    15: 8 / 3,
 }
-BAR_MULTIPLIERS = {2: 1, 9: 1.5, 15: 2 / 3}
+BAR_MULTIPLIERS = {2: 1}
 
 
 def finite(value):
@@ -104,7 +106,7 @@ def engine_to_stored(value, scaling):
     raise ValueError(f"physical conversion for scaling {scaling} is not mapped")
 
 
-def to_stored(value, descriptor, *, timebase=None):
+def to_stored(value, descriptor, *, timebase=None, legacy_rate=False):
     if not isinstance(value, UNIT_VALUES):
         return value
     v = value.value
@@ -117,7 +119,7 @@ def to_stored(value, descriptor, *, timebase=None):
         if isinstance(value, Rate):
             if v <= 0:
                 raise ValueError("rate must be positive")
-            engine = v
+            engine = 1 / v if timebase in TIMEBASE_BEATS | BAR_MULTIPLIERS and not legacy_rate else v
         elif isinstance(value, Beats) and timebase in TIMEBASE_BEATS | BAR_MULTIPLIERS:
             if v <= 0:
                 raise ValueError("beat duration must be positive")
@@ -127,7 +129,7 @@ def to_stored(value, descriptor, *, timebase=None):
                 base = value.beats_per_bar * BAR_MULTIPLIERS[timebase]
             else:
                 base = TIMEBASE_BEATS[timebase]
-            engine = base / v
+            engine = base / v if legacy_rate else v / base
         elif isinstance(value, (Hz, Seconds)) and timebase in (0, 1):
             if v <= 0:
                 raise ValueError("rate or period must be positive")

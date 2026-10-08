@@ -15,7 +15,9 @@ lfo.state(per_voice=True)
 p.configure(voices=8, voice_stacking=2, mono_mode="digi", glide=Seconds(0.008))
 ```
 
-Plain numbers use stored units. Physical wrappers require an authoritative descriptor. Timebase-aware rate conversions reject incompatible units; bar durations require explicit beats per bar. Legacy-rate physical conversion is not mapped, so retain its stored value when editing legacy presets. Validation rejects nonfinite values, incompatible types and known invalid ranges/enum members. It does not invent a bound where the installation supplies none.
+Plain numbers use stored units. Physical wrappers require an authoritative descriptor. Timebase-aware rate conversions reject incompatible units; bar durations require explicit beats per bar. Legacy LFO rates multiply beat frequency while modern rates divide it; the setter accounts for `USE_LEGACY_RATE`. Dotted/triplet whole-note timebases use fixed quarter-note durations rather than the current meter. Validation rejects nonfinite values, incompatible types and known invalid ranges/enum members.
+
+The legacy/modern rate formulas come from the `clock_generator` source embedded in the installed LFO definition. Glide uses cubic seconds, stored range 0..1, as registered by `peI.JBL()` in Bitwig 6.1.3. These establish file semantics; live timing checks remain separate.
 
 ## References and modulation
 

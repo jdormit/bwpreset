@@ -21,7 +21,7 @@ Each row requires a public API, automated behavior checks and appropriate Bitwig
 | Public-safe artifacts and standalone test execution | Coordinator | Artifact boundaries audited; clean export pending | Not applicable |
 | Independent adversarial review | Coordinator | Two integrated reviews; findings addressed with regressions | Not applicable |
 | Agent skill discovery and README | Coordinator | Written; npx skills discovers bitwig-grid | Not applicable |
-| Public GitHub publication | Coordinator | Pending release checks | Not applicable |
+| Public GitHub publication | Coordinator | Published at https://github.com/jdormit/bwpreset; CI passed | Not applicable |
 
 The previous feature checks are recorded in [verification.md](verification.md). The detailed acceptance scope is [GRID-GAPS.md](../GRID-GAPS.md).
 
@@ -29,6 +29,6 @@ The previous feature checks are recorded in [verification.md](verification.md). 
 
 The full definition of done is **not yet met**: new live audio, timing, hardware and UI checks remain pending. The software APIs must not be described as fully live-verified.
 
-Physical conversion for imported `USE_LEGACY_RATE` presets is not mapped; retain stored rate values when editing those presets. Glide's physical conversion is confirmed, but an unknown upper bound is deliberately absent from the app-only descriptor. Other physical wrappers require authoritative descriptors rather than guessing units. Compressed audio/AIFF/RF64 can be assigned through explicit metadata references; automatic inspection currently supports WAV. Bitwig generates its own analysis caches.
+Physical wrappers require authoritative descriptors rather than guessing units. Legacy/modern LFO rate behavior and the registered glide bound are mapped. Compressed audio/AIFF/RF64 can be assigned through explicit metadata references; automatic inspection currently supports WAV. Bitwig generates its own analysis caches.
 
 Forward-format asset/curve variants outside the inspected schema retain opaque state through lossless import or are reported explicitly; that is preservation, not a promise of a named editor for unknown future data.

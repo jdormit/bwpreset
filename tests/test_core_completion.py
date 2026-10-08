@@ -280,7 +280,7 @@ def test_synced_rate_requires_explicit_meter_and_rejects_hz(catalog):
     from bwpreset.units import Beats, Hz, Rate
 
     a = patch(catalog).add("Test", 0, 0, TIMEBASE="Quarter note", RATE=Beats(0.5))
-    assert m.param_value(a.used["RATE"]) == 2
+    assert m.param_value(a.used["RATE"]) == 0.5
     a.set(RATE=Rate(3))
     with pytest.raises(PatchError):
         a.set(RATE=Hz(2))
@@ -289,7 +289,7 @@ def test_synced_rate_requires_explicit_meter_and_rejects_hz(catalog):
 
     with pytest.raises(ValueError, match="beats_per_bar"):
         to_stored(Beats(2), descriptor, timebase=2)
-    assert to_stored(Beats(2, beats_per_bar=3), descriptor, timebase=2) == 1.5
+    assert to_stored(Beats(2, beats_per_bar=3), descriptor, timebase=2) == pytest.approx(2 / 3)
 
 
 def test_unknown_duplicate_parameters_survive_unrelated_edit(catalog):

@@ -62,7 +62,7 @@ def fingerprint() -> tuple:
     for path in sorted(corpus_files()):
         stat = os.stat(path)
         digest.update(f"{path}\0{stat.st_size}\0{stat.st_mtime_ns}\n".encode())
-    return (4, str(LIBRARY), version, digest.hexdigest())
+    return (5, str(LIBRARY), version, digest.hexdigest())
 
 
 def describe_descriptor(d: Obj) -> dict:
@@ -314,9 +314,7 @@ def load() -> tuple[dict, dict[uuid.UUID, Obj], dict[str, object]]:
                 learner.types[dev_type]["params"].setdefault(
                     pname, {"kind": "number", "values": collections.Counter(), "descriptors": collections.Counter()}
                 )
-                # Cubic seconds are confirmed by the Bitwig inspector probe. Keep
-                # an unknown upper bound absent rather than inventing a range.
-                desc = Obj(m.DESCRIPTOR, [(0x124, 7, 0.0), (0x37B, 7, 0.0), (0x126, 1, 5), (0x128, 1, 3)])
+                desc = Obj(m.DESCRIPTOR, [(0x124, 7, 0.0), (0x125, 7, 1.0), (0x37B, 7, 0.0), (0x126, 1, 5), (0x128, 1, 3)])
                 learner.add_descriptor(dev_type, pname, desc)
         for atom in m.get(definition.body, 0xAD, []):
             pname, desc = m.get(atom, 0x2BD), m.get(atom, 0x2BE)

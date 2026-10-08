@@ -229,6 +229,7 @@ class Node:
                 if p.cls == m.P_ENUM:
                     value = units.enum_value(value, descriptor)
                 timebase = None
+                legacy = False
                 if name == "RATE" and "TIMEBASE" in self.available and isinstance(value, units.UNIT_VALUES):
                     base = self.used.get("TIMEBASE")
                     timebase = values.get("TIMEBASE", m.param_value(base) if base is not None else 0)
@@ -236,12 +237,10 @@ class Node:
                     legacy = values.get(
                         "USE_LEGACY_RATE", m.param_value(self.used["USE_LEGACY_RATE"]) if "USE_LEGACY_RATE" in self.used else False
                     )
-                    if legacy:
-                        raise ValueError("physical rate conversion for USE_LEGACY_RATE is not mapped")
                 if isinstance(value, units.UNIT_VALUES):
                     if descriptor is None:
                         raise ValueError("no authoritative descriptor for physical conversion")
-                    value = units.to_stored(value, descriptor, timebase=timebase)
+                    value = units.to_stored(value, descriptor, timebase=timebase, legacy_rate=legacy)
                 value = coerce(value, field_type(p, fid), f"{self.kind}.{name}")
                 if p.cls in (m.P_NUMBER, m.P_INT):
                     units.validate_range(value, descriptor)
